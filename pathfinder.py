@@ -1,6 +1,7 @@
 import pygame
 from queue import PriorityQueue
 import math
+from collections import deque
 
 WIDTH = 800
 WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
@@ -135,9 +136,9 @@ def astar(draw, grid, start, end):
     pq = PriorityQueue()
     pq.put((0, index, start))
     last = {}
-    g_score = {spot: float("inf") for row in grid for spot in row}
+    g_score = {cell: float("inf") for row in grid for cell in row}
     g_score[start] = 0
-    f_score = {spot: float("inf") for row in grid for spot in row}
+    f_score = {cell: float("inf") for row in grid for cell in row}
     f_score[start] = h(start.get_pos(), end.get_pos())
 
     queue_hash = { start }    
@@ -175,55 +176,109 @@ def astar(draw, grid, start, end):
 
     return False
 
+def dijkstra(draw, grid, start, end):
+    index = 0
+    pq = PriorityQueue()
+    dist = {cell: float("inf") for row in grid for cell in row}
+    dist[start] = 0
+    pq.put((0, index, start))
+    last = {}
 
-rows = 80
-grid = make_grid(rows, WIDTH)
+    while not pq.empty():
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        
+        curr = pq.get()[2]
 
-start = None
-end = None
+        if curr == end:
+            draw_path(last, end, draw)
+            end.set_end()
+            start.set_start()
+            return True
 
-started = False
-running = True
-  
-while running:
-    draw(WINDOW, grid, rows, WIDTH)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-            
-        if started:
-            continue
+        for neighbour in curr.neighbours:
+            alt = dist[curr] + 1
+            if alt < dist[neighbour]:
+                index += 1
+                dist[neighbour] = alt
+                last[neighbour] = curr
+                pq.put((dist[neighbour], index, neighbour))
+                neighbour.open()
 
-        if pygame.mouse.get_pressed()[0]:
-            pos = pygame.mouse.get_pos()
-            row, col = get_clicked_pos(pos, rows, WIDTH)
-            cell = grid[row][col]
-            if not start and cell != end:
-                start = cell
-                start.set_start()
-            
-            elif not end and cell != start:
-                end = cell
-                end.set_end()
+        draw()
 
-            elif cell != start and cell != end:
-                cell.set_barrier()
+        if curr != start:
+            curr.close()
 
-        elif pygame.mouse.get_pressed()[2]:
-            pos = pygame.mouse.get_pos()
-            row, col = get_clicked_pos(pos, rows, WIDTH)
-            cell = grid[row][col]
-            cell.clear()
-            if cell == start:
-                start = None
-            elif cell == end:
-                end = None
+    return False
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a and start and end:
-                for row in grid:
-                    for cell in row:
-                        cell.update_neighbours(grid)
 
-                # Run algorithm
-                astar(lambda: draw(WINDOW, grid, rows, WIDTH), grid, start, end)
+
+def pathfinder(window, width):
+    rows = 80
+    grid = make_grid(rows, width)
+
+    start = None
+    end = None
+
+    started = False
+    running = True
+    
+    while running:
+        draw(window, grid, rows, width)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            if pygame.mouse.get_pressed()[0] and not started:
+                pos = pygame.mouse.get_pos()
+                row, col = get_clicked_pos(pos, rows, width)
+                cell = grid[row][col]
+                if not start and cell != end:
+                    start = cell
+                    start.set_start()
+                
+                elif not end and cell != start:
+                    end = cell
+                    end.set_end()
+
+                elif cell != start and cell != end:
+                    cell.set_barrier()
+
+            elif pygame.mouse.get_pressed()[2] and not started:
+                pos = pygame.mouse.get_pos()
+                row, col = get_clicked_pos(pos, rows, width)
+                cell = grid[row][col]
+                cell.clear()
+                if cell == start:
+                    start = None
+                elif cell == end:
+                    end = None
+
+            if event.type == pygame.KEYDOWN:
+                if start and end and not started:
+                    for row in grid:
+                        for cell in row:
+                            cell.update_neighbours(grid)
+
+                    if event.key == pygame.K_a:
+                        # Run astar algorithm
+                        astar(lambda: draw(window, grid, rows, width), grid, start, end)
+                        started = True
+
+                    elif event.key == pygame.K_d:
+                        # Run dijkstra algorithm
+                        dijkstra(lambda: draw(window, grid, rows, width), grid, start, end)
+                        started = True
+
+                if event.key == pygame.K_r:
+                    start = None
+                    end = None
+                    started = False
+                    grid = make_grid(rows, width)
+
+
+    pygame.quit()
+
+pathfinder(WINDOW, WIDTH)
