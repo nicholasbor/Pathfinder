@@ -93,6 +93,9 @@ class Cell:
         # Cell to the left is a neighbour
         if self.col > 0 and not grid[self.row][self.col - 1].is_barrier():
             self.neighbours.append(grid[self.row][self.col - 1])
+
+    def clear_neighbours(self):
+        self.neighbours = []
         
 
 def make_grid(rows, width):
@@ -299,6 +302,7 @@ def pathfinder(window, width):
                     started = False
                     for row in grid:
                         for cell in row:
+                            cell.clear_neighbours()
                             if cell.is_open() or cell.is_closed() or cell.is_path():
                                 cell.clear()
 
