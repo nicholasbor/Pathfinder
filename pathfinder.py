@@ -2,6 +2,8 @@ import pygame
 from queue import PriorityQueue
 import math
 from collections import deque
+import time
+import sys
 
 WIDTH = 800
 WINDOW = pygame.display.set_mode((WIDTH, WIDTH))
@@ -62,6 +64,15 @@ class Cell:
 
     def make_path(self):
         self.colour = YELLOW
+
+    def is_open(self):
+        return self.colour == GREEN
+
+    def is_closed(self):
+        return self.colour == RED
+
+    def is_path(self):
+        return self.colour == YELLOW
 
     def draw(self, window):
         pygame.draw.rect(window, self.colour, (self.x, self.y, self.width, self.width))
@@ -264,12 +275,18 @@ def pathfinder(window, width):
 
                     if event.key == pygame.K_a:
                         # Run astar algorithm
+                        s = time.perf_counter()
                         astar(lambda: draw(window, grid, rows, width), grid, start, end)
+                        e = time.perf_counter()
+                        print(f"Astar algorithm finished in {e - s:0.4f} seconds")
                         started = True
 
                     elif event.key == pygame.K_d:
                         # Run dijkstra algorithm
+                        s = time.perf_counter()
                         dijkstra(lambda: draw(window, grid, rows, width), grid, start, end)
+                        e = time.perf_counter()
+                        print(f"Dijkstra algorithm finished in {e - s:0.4f} seconds")
                         started = True
 
                 if event.key == pygame.K_r:
@@ -278,6 +295,12 @@ def pathfinder(window, width):
                     started = False
                     grid = make_grid(rows, width)
 
+                if event.key == pygame.K_c:
+                    started = False
+                    for row in grid:
+                        for cell in row:
+                            if cell.is_open() or cell.is_closed() or cell.is_path():
+                                cell.clear()
 
     pygame.quit()
 
