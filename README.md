@@ -24,6 +24,7 @@ You can run the astar algorithm by pressing the button **a** and also view how l
 ![](gifs/astar.gif)
 
 <img src="gifs/astar_time.png" align="left" height="38"/> <br/>
+<br/>
 
 You can also clear the algorithm that has finished running with **c** and can remove start, end points and barriers with right-mouse button 
 
