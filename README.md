@@ -18,3 +18,11 @@ python3 pathfinder.py
 To set start, end points and barriers use left-mouse button and to remove start, end points and barriers use right-mouse button
 
 ![](gifs/startendbarrier.gif)
+
+You can run the astar algorithm by pressing the button **a** and also view how long the algorithm takes in the terminal 
+
+![](gifs/astar.gif)
+
+![](gifs/astar_time.png)
+
+
