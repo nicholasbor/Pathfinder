@@ -23,6 +23,5 @@ You can run the astar algorithm by pressing the button **a** and also view how l
 
 ![](gifs/astar.gif)
 
-![](gifs/astar_time.png)
-
+<img src="gifs/astar_time.png" align="left" height="28">
 
