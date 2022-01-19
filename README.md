@@ -16,3 +16,5 @@ python3 pathfinder.py
 ```
 
 To set start, end points and barriers use left-mouse button and to remove start, end points and barriers use right-mouse button
+
+![](startendbarrier.gif)
