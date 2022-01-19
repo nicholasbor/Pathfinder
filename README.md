@@ -28,7 +28,7 @@ You can run the astar algorithm by pressing the button **a** and also view how l
 
 You can also clear the algorithm that has finished running with **c** and can remove start, end points and barriers with right-mouse button 
 
-![](gifs/clear.gif)
+![](gifs/clear_algorithm.gif)
 
 ![](gifs/removing.gif)
 
