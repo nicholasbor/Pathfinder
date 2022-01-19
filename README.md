@@ -23,7 +23,9 @@ You can run the astar algorithm by pressing the button **a** and also view how l
 
 ![](gifs/astar.gif)
 
-<img src="gifs/astar_time.png" align="left" height="32"/>  
+<p align="left">
+<img src="gifs/astar_time.png" align="left" height="32"/> 
+</p>
 
 You can also clear the algorithm that has finished running with **c** and can remove start, end points and barriers with right-mouse button 
 
@@ -35,4 +37,6 @@ You can also run the dijkstra algorithm by pressing the button **d** and also vi
 
 ![](gifs/dijkstra.gif)
 
-<img src="gifs/dijkstra_time.png" align="left" height="32"/>
+<p align="left">
+<img src="gifs/dijkstra_time.png" align="left" height="32"/> 
+</p>
